@@ -22,5 +22,15 @@
     "ts-node": "^10.9.2",
     "typechain": "^8.3.2",
     "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "deploy:testnet": "hardhat ignition deploy ignition/modules/TokenFactory.ts --network xlayerTestnet",
+    "deploy:mainnet": "hardhat ignition deploy ignition/modules/TokenFactory.ts --network xlayer",
+    "verify:contracts": "hardhat verify --network xlayerTestnet"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0"
   }
 }
