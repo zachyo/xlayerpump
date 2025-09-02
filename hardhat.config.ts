@@ -1,5 +1,6 @@
 import type { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+require("dotenv").config();
 
 const config: HardhatUserConfig = {
   solidity: "0.8.28",
@@ -33,3 +34,5 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
+
+// https://www.oklink.com/x-layer-testnet

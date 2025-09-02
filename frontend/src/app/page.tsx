@@ -1,7 +1,34 @@
+'use client'
+
+import { useState } from 'react'
 import { WalletConnect } from "@/components/wallet-connect";
 import { PriceChart } from "@/components/price-chart";
+import { PoolStatus } from "@/components/pool-status";
+import { useCreateToken, useBuyTokens, useSellTokens, useGetAllTokens } from "@/hooks/useTokenFactory";
+import { useAppStore } from "@/store/useAppStore";
 
 export default function Home() {
+  const { tokenForm, tradeForm, setTokenForm, setTradeForm } = useAppStore()
+  const { createToken, isPending: isCreating } = useCreateToken()
+  const { buyTokens, isPending: isBuying } = useBuyTokens()
+  const { sellTokens, isPending: isSelling } = useSellTokens()
+  const { tokens } = useGetAllTokens()
+
+  const handleCreateToken = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await createToken(tokenForm.name, tokenForm.symbol, tokenForm.description, tokenForm.imageUrl)
+  }
+
+  const handleBuyTokens = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await buyTokens(tradeForm.tokenAddress, tradeForm.amount)
+  }
+
+  const handleSellTokens = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await sellTokens(tradeForm.tokenAddress, tradeForm.amount)
+  }
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
@@ -27,31 +54,49 @@ export default function Home() {
         {/* Token Creation Section */}
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
           <h3 className="text-2xl font-semibold mb-4 text-green-400">Create Token</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Token Name"
-              className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
-            />
-            <input
-              type="text"
-              placeholder="Token Symbol"
-              className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
-            />
-            <input
-              type="text"
-              placeholder="Description"
-              className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
-            />
-            <input
-              type="url"
-              placeholder="Image URL"
-              className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
-            />
-          </div>
-          <button className="mt-4 px-6 py-3 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
-            Create Token (1 OKB)
-          </button>
+          <form onSubmit={handleCreateToken} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Token Name"
+                value={tokenForm.name}
+                onChange={(e) => setTokenForm({ name: e.target.value })}
+                className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Token Symbol"
+                value={tokenForm.symbol}
+                onChange={(e) => setTokenForm({ symbol: e.target.value })}
+                className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Description"
+                value={tokenForm.description}
+                onChange={(e) => setTokenForm({ description: e.target.value })}
+                className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
+                required
+              />
+              <input
+                type="url"
+                placeholder="Image URL"
+                value={tokenForm.imageUrl}
+                onChange={(e) => setTokenForm({ imageUrl: e.target.value })}
+                className="px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isCreating}
+              className="px-6 py-3 bg-green-500 text-white rounded hover:bg-green-600 transition-colors disabled:opacity-50"
+            >
+              {isCreating ? 'Creating...' : 'Create Token (1 OKB)'}
+            </button>
+          </form>
         </div>
 
         {/* Trading Section */}
@@ -60,32 +105,58 @@ export default function Home() {
           <div className="mb-6">
             <PriceChart />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {tradeForm.tokenAddress && (
+            <div className="mb-6">
+              <PoolStatus tokenAddress={tradeForm.tokenAddress} />
+            </div>
+          )}
+          <form onSubmit={handleBuyTokens} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <label className="block text-sm mb-2">Token Address</label>
-              <input
-                type="text"
-                placeholder="0x..."
+              <select
+                value={tradeForm.tokenAddress}
+                onChange={(e) => setTradeForm({ tokenAddress: e.target.value })}
                 className="w-full px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
-              />
+                required
+              >
+                <option value="">Select Token</option>
+                {tokens?.map((token) => (
+                  <option key={token} value={token}>
+                    {token.slice(0, 6)}...{token.slice(-4)}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm mb-2">Amount</label>
               <input
                 type="number"
                 placeholder="100"
+                value={tradeForm.amount}
+                onChange={(e) => setTradeForm({ amount: e.target.value })}
                 className="w-full px-4 py-2 bg-gray-700 rounded border border-gray-600 focus:border-green-400 focus:outline-none"
+                required
               />
             </div>
-            <div className="flex gap-2">
-              <button className="flex-1 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
-                Buy
-              </button>
-              <button className="flex-1 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
-                Sell
+            <div className="flex gap-2 items-end">
+              <button
+                type="submit"
+                disabled={isBuying}
+                className="flex-1 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors disabled:opacity-50"
+              >
+                {isBuying ? 'Buying...' : 'Buy'}
               </button>
             </div>
-          </div>
+          </form>
+          <form onSubmit={handleSellTokens} className="flex gap-2">
+            <button
+              type="submit"
+              disabled={isSelling}
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors disabled:opacity-50"
+            >
+              {isSelling ? 'Selling...' : 'Sell Selected Amount'}
+            </button>
+          </form>
         </div>
       </main>
     </div>

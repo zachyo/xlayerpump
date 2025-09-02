@@ -5,7 +5,7 @@ import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 const TokenFactoryModule = buildModule("TokenFactoryModule", (m) => {
   // Parameters
-  const okbAddress = m.getParameter("okbAddress", "0x1234567890123456789012345678901234567890"); // Placeholder OKB address
+  const okbAddress = m.getParameter("okbAddress", "0x599C6a481c707317EDE2D4B7ab81d0AB49dC747c"); // Placeholder OKB address
   const initialOwner = m.getAccount(0); // Deployer
 
   // Deploy OKBPoolManager
