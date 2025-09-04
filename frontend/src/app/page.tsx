@@ -6,13 +6,13 @@ import {
   Zap,
   Shield,
   TrendingUp,
-  Users,
+  // Users,
   Coins,
   ArrowRight,
-  CheckCircle,
+  // CheckCircle,
   Star,
   Globe,
-  Lock,
+  // Lock,
   BarChart3
 } from 'lucide-react'
 import Link from 'next/link'

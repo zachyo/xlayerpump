@@ -37,13 +37,13 @@ export function PriceChart() {
 
     // Dummy data
     const data: LineData[] = [
-      { time: '2023-01-01' as any, value: 0.0001 },
-      { time: '2023-01-02' as any, value: 0.00012 },
-      { time: '2023-01-03' as any, value: 0.00015 },
-      { time: '2023-01-04' as any, value: 0.00018 },
-      { time: '2023-01-05' as any, value: 0.00022 },
-      { time: '2023-01-06' as any, value: 0.00028 },
-      { time: '2023-01-07' as any, value: 0.00035 },
+      { time: '2023-01-01', value: 0.0001 },
+      { time: '2023-01-02', value: 0.00012 },
+      { time: '2023-01-03', value: 0.00015 },
+      { time: '2023-01-04', value: 0.00018 },
+      { time: '2023-01-05', value: 0.00022 },
+      { time: '2023-01-06', value: 0.00028 },
+      { time: '2023-01-07', value: 0.00035 },
     ]
 
     lineSeries.setData(data)

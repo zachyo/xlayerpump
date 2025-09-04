@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+// import { useState } from 'react'
 import { WalletConnect } from "@/components/wallet-connect";
 import { PriceChart } from "@/components/price-chart";
 import { PoolStatus } from "@/components/pool-status";

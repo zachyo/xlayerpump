@@ -1,7 +1,7 @@
 'use client'
 
 import { useAccount } from 'wagmi'
-import { useReadContract, useWriteContract } from 'wagmi'
+import { useReadContract } from 'wagmi'
 import { CONTRACT_ADDRESSES, TOKEN_FACTORY_ABI } from '@/lib/contracts'
 
 export default function AdminPage() {
@@ -16,7 +16,7 @@ export default function AdminPage() {
     functionName: 'getAllTokens',
   })
 
-  const { writeContract } = useWriteContract()
+  // const { writeContract } = useWriteContract()
 
   if (!isConnected) {
     return <div>Please connect your wallet</div>
